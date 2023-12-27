@@ -17,6 +17,19 @@ export const fetchRootRegions = async (hierarchyId) => {
   }
 };
 
+export const fetchSiblings = async (regionId, hierarchyId) => {
+  try {
+    const response = await api.get(`/api/regions/${regionId}/siblings`, { params: { hierarchyId } });
+    if (response.status === 404) {
+      return [];
+    }
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching siblings:', error);
+    return [];
+  }
+};
+
 export const fetchSubregions = async (regionId, hierarchyId) => {
   try {
     const response = await api.get(`/api/regions/${regionId}/subregions`, { params: { hierarchyId } });
