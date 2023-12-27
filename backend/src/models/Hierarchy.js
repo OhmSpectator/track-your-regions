@@ -11,6 +11,15 @@ class Hierarchy extends Model {
     };
   }
 
+  async getSiblings() {
+    return Hierarchy.findAll({
+      where: {
+        parentId: this.parentId,
+        hierarchyId: this.hierarchyId,
+      },
+    });
+  }
+
   static async getAncestors(regionId, hierarchyId) {
     const ancestors = await sequelize.query(`
             WITH RECURSIVE Ancestors AS (

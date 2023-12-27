@@ -400,3 +400,29 @@ exports.getSubregions = async (req, res) => {
   ) : { message: subregions.message };
   return res.status(subregions.status).json(result);
 };
+
+exports.getSiblings = async (req, res) => {
+  const { regionId } = req.params;
+  const hierarchyId = req.query.hierarchyId || 1;
+
+  console.log('regionId: ', regionId);
+
+  // Check if the region exists
+  const region = await Hierarchy.findOne({
+    where: {
+      regionId,
+      hierarchyId,
+    },
+  });
+  if (!region) {
+    return res.status(404).json({ message: 'Region not found' });
+  }
+
+  try {
+    const siblings = await region.getSiblings();
+    return res.status(200).json(siblings.map((sibling) => sibling.toApiFormat()));
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ message: 'Internal Server Error' });
+  }
+};

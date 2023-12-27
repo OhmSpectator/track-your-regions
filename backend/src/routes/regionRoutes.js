@@ -104,4 +104,20 @@ router.get(
   },
 );
 
+router.get(
+  '/:regionId/siblings',
+  ...[
+    check('regionId').isInt().withMessage('Region ID must be an integer'),
+    check('hierarchyId').optional().isInt().withMessage('Hierarchy ID must be an integer'),
+  ],
+  async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      const errorMessages = errors.array().map((error) => error.msg);
+      return res.status(400).json({ errors: errorMessages });
+    }
+    return regionController.getSiblings(req, res);
+  },
+);
+
 module.exports = router;
