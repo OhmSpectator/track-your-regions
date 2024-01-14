@@ -31,6 +31,13 @@ router.get(
 
 router.get(
   '/search',
+  /**
+   * Search regions based on query and hierarchy ID.
+   *
+   * @param {Object} req - The request object.
+   * @param {Object} res - The response object.
+   * @returns {Object} The response object.
+   */
   [
     query('query').isString().withMessage('Query must be a string'),
     query('hierarchyId').optional().isInt(
@@ -49,6 +56,13 @@ router.get(
 
 router.get(
   '/:regionId',
+  /**
+   * Get region by ID.
+   *
+   * @param {Object} req - The request object.
+   * @param {Object} res - The response object.
+   * @returns {Object} The response object.
+   */
   ...[
     check('regionId').isInt(
       { min: 0, max: getDataTypeRange(Region, 'id').max },
@@ -86,7 +100,6 @@ router.get(
     return regionController.getSubregions(req, res);
   },
 );
-
 router.get(
   '/:regionId/ancestors',
   ...[
